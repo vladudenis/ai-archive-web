@@ -44,7 +44,7 @@
 
 			// Prepend the hierarchical number to the heading's text
 			header.textContent = `${prefix} ${header.textContent}`;
-			header.id = header.textContent.replace(/ /g,'')
+			header.id = header.textContent.replace(/ /g, '');
 		});
 
 		const codeBlocks = document.querySelectorAll('pre code');
@@ -83,13 +83,20 @@
 </script>
 
 {#if notebook}
-	<div class="flex min-h-screen w-screen">
+	<main class="flex min-h-screen w-screen">
 		<TableOfContents />
 
-		<article id="content" class="flex h-full w-full flex-col p-8 ml-[20%]">
-			<h1>{notebook.title}</h1>
-			<span class="mb-4">
-				<p>Nook: {notebook.nook}</p>
+		<article id="content" class="ml-[20%] flex h-full w-full flex-col p-8">
+			<p class="pb-1 text-4xl">{notebook.title}</p>
+			<div class="mb-4">
+				<div class="flex flex-wrap gap-1">
+					Associated Nooks: {#each notebook.nooks as nook}
+						<span
+							class="inline-flex items-center rounded-full bg-gray-200 px-3 text-sm font-medium text-gray-800"
+							>{nook}</span
+						>
+					{/each}
+				</div>
 				<p>
 					Published: {new Date(notebook.publishedAt).toLocaleDateString('en-US', {
 						year: 'numeric',
@@ -104,38 +111,39 @@
 						day: 'numeric'
 					})}
 				</p>
-			</span>
+			</div>
 
 			<div id="rendered-body" class="ml-1 mr-14">
 				{@html processedBody}
 			</div>
 		</article>
-	</div>
+	</main>
 {/if}
 
 <style>
+	/* <-- Dynamic html block styles --> */
 	:global(#content p:empty) {
-      display: block; /* Ensure it acts as a block element */
-      margin: 0.75em 0;  /* Add vertical spacing */
-  }
+		display: block; /* Ensure it acts as a block element */
+		margin: 0.75em 0; /* Add vertical spacing */
+	}
 
-  :global(#content ul) {
-      list-style-type: disc; /* Ensure bullets are used */
-      padding-left: 1.5em;   /* Indent the list */
-  }
+	:global(#content ul) {
+		list-style-type: disc; /* Ensure bullets are used */
+		padding-left: 1.5em; /* Indent the list */
+	}
 
-  :global(#content li) {
-      margin-bottom: 0.5em;  /* Optional: adds space between list items */
-  }
+	:global(#content li) {
+		margin-bottom: 0.5em; /* Optional: adds space between list items */
+	}
 
-  :global(#content) h1 {
+	:global(#content) h1 {
 		line-height: 1;
 		margin-bottom: 0.5rem;
 		font-size: 2rem;
 	}
 
 	:global(.dynamic-heading) {
-			margin-left: -0.5rem;
+		margin-left: -0.5rem;
 	}
 
 	:global(h1.dynamic-heading) {
@@ -162,78 +170,79 @@
 		color: #4682b4;
 	}
 
-	/* code block styles */
-  :global(pre) {
-      background: #282c34; /* Background color for code blocks */
-      color: white; /* Default text color */
-      padding: 1rem;
-      border-radius: 8px;
-      overflow-x: auto; /* Scroll for long lines */
-      font-size: 0.9rem;
-      display: inline-block; /* Make <pre> only as large as the content inside */
-  }
+	/* <-- Code block styles --> */
+	:global(pre) {
+		background: #282c34; /* Background color for code blocks */
+		color: white; /* Default text color */
+		padding: 1rem;
+		border-radius: 8px;
+		overflow-x: auto; /* Scroll for long lines */
+		font-size: 0.9rem;
+		display: inline-block; /* Make <pre> only as large as the content inside */
+	}
 
-  :global(code) {
-      font-family: 'Fira Code', 'Courier New', monospace; /* Use monospaced font */
-  }
+	:global(code) {
+		font-family: 'Fira Code', 'Courier New', monospace; /* Use monospaced font */
+	}
 
-  :global(.hljs-keyword) {
-      color: #c678dd; /* Example keyword color */
-  }
+	:global(.hljs-keyword) {
+		color: #c678dd; /* Example keyword color */
+	}
 
-  :global(.hljs-string) {
-      color: #98c379; /* Example string color */
-  }
+	:global(.hljs-string) {
+		color: #98c379; /* Example string color */
+	}
 
-  :global(.hljs-comment) {
-      color: #5c6370; /* Example comment color */
-      font-style: italic;
-  }
+	:global(.hljs-comment) {
+		color: #5c6370; /* Example comment color */
+		font-style: italic;
+	}
 
-	/* table styles */
-  /* Table container */
-  :global(.sanity-table) {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      font-family: Arial, sans-serif;
-      background-color: #fff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+	/* <-- Table styles --> */
 
-  /* Table headers */
-  :global(.sanity-table th) {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 15px;
-      text-align: left;
-      font-weight: bold;
-      border-bottom: 2px solid #ddd;
-  }
+	/* Table container */
+	:global(.sanity-table) {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 20px 0;
+		font-family: Arial, sans-serif;
+		background-color: #fff;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
 
-  /* Table rows */
-  :global(.sanity-table tr) {
-      border-bottom: 1px solid #ddd;
-  }
+	/* Table headers */
+	:global(.sanity-table th) {
+		background-color: #4caf50;
+		color: white;
+		padding: 12px 15px;
+		text-align: left;
+		font-weight: bold;
+		border-bottom: 2px solid #ddd;
+	}
 
-  /* Table cells */
-  :global(.sanity-table td) {
-      padding: 12px 15px;
-      text-align: left;
-  }
+	/* Table rows */
+	:global(.sanity-table tr) {
+		border-bottom: 1px solid #ddd;
+	}
 
-  /* Alternating row colors */
-  :global(.sanity-table tr:nth-child(even)) {
-      background-color: #f9f9f9;
-  }
+	/* Table cells */
+	:global(.sanity-table td) {
+		padding: 12px 15px;
+		text-align: left;
+	}
 
-  /* Hover effect */
-  :global(.sanity-table tr:hover) {
-      background-color: #f1f1f1;
-  }
+	/* Alternating row colors */
+	:global(.sanity-table tr:nth-child(even)) {
+		background-color: #f9f9f9;
+	}
 
-  /* Border for table cells */
-  :global(.sanity-table td, .sanity-table th) {
-      border: 1px solid #ddd;
-  }
+	/* Hover effect */
+	:global(.sanity-table tr:hover) {
+		background-color: #f1f1f1;
+	}
+
+	/* Border for table cells */
+	:global(.sanity-table td, .sanity-table th) {
+		border: 1px solid #ddd;
+	}
 </style>

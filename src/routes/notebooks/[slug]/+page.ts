@@ -39,7 +39,7 @@ export async function load({ params, fetch }) {
 					},
 					publishedAt,
 					updatedAt,
-					"nook": nook->title
+					"nooks": nooks[]->title
         }`);
 
 		const res = await fetch(

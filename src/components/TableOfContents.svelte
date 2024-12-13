@@ -38,7 +38,7 @@
 				.join('.');
 
 			return {
-				id: `${prefix}${header.textContent.replace(/ /g,'')}`,
+				id: `${prefix}${header.textContent.replace(/ /g, '')}`,
 				text: `${prefix} ${header.textContent}` || '',
 				level
 			};
@@ -52,11 +52,10 @@
 </script>
 
 <nav
-	class="fixed left-0 top-0 z-10 h-screen w-1/5 overflow-y-auto border border-gray-300 bg-gray-50 p-4 pl-6"
+	class="fixed left-3 top-8 z-10 min-h-72 w-1/5 overflow-y-auto rounded-lg border border-gray-300 bg-gray-50 p-4 pl-6"
 >
-	<p></p>
 	<h2 class="mb-2 text-lg font-semibold">Table of Contents</h2>
-	<ul class="list-none space-y-1 ml-1">
+	<ul class="ml-1 list-none space-y-1">
 		{#each tocItems as { id, text, level }}
 			<li style="margin-left: {level - 1}rem;">
 				<a
