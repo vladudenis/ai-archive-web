@@ -76,6 +76,25 @@ export async function load({ params, fetch }) {
 						alt: altText,
 						className: 'sanity-image'
 					});
+				},
+				// Custom serializer for table
+				table: (props) => {
+					const tableRows = props.node.rows.map((row, index) => {
+						const tableCells = row.cells.map((cell) => {
+							// If it's the first row, use <th> for table header cells
+							if (index === 0) {
+								return h('th', { className: 'sanity-table-header' }, cell);
+							} else {
+								return h('td', {}, cell); // Regular cells in subsequent rows
+							}
+						});
+
+						// Render each row in a <tr> element
+						return h('tr', {}, tableCells);
+					});
+
+					// Wrap all rows in a <table> element
+					return h('table', { className: 'sanity-table' }, tableRows);
 				}
 			}
 		};
