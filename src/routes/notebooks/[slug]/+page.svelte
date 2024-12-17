@@ -4,11 +4,13 @@
 	import katex from 'katex';
 	import 'katex/dist/katex.min.css';
 	import hljs from 'highlight.js';
+	import ReferencesNav from '../../../components/ReferencesNav.svelte';
 
 	export let data;
 	const notebook = data.notebook;
 
 	onMount(() => {
+		// Render KaTeX for inline LaTeX elements
 		const latexInlineElements = document.querySelectorAll('.latex-inline');
 		latexInlineElements.forEach((el) => {
 			const latex = el.innerHTML.trim();
@@ -86,7 +88,7 @@
 	<main class="flex min-h-screen w-screen">
 		<TableOfContents />
 
-		<article id="content" class="ml-[20%] flex h-full w-full flex-col p-8">
+		<article id="content" class="ml-[20%] mr-[22%] flex h-full w-full flex-col p-8">
 			<p class="pb-1 text-4xl">{notebook.title}</p>
 			<div class="mb-4">
 				<div class="flex flex-wrap gap-1">
@@ -113,15 +115,21 @@
 				</p>
 			</div>
 
-			<div id="rendered-body" class="ml-1 mr-14">
+			<div id="rendered-body" class="ml-1">
 				{@html processedBody}
 			</div>
 		</article>
+
+		<ReferencesNav />
 	</main>
 {/if}
 
 <style>
 	/* <-- Dynamic html block styles --> */
+	:global(#content .paragraph-inline) {
+		display: inline;
+	}
+
 	:global(#content p:empty) {
 		display: block; /* Ensure it acts as a block element */
 		margin: 0.75em 0; /* Add vertical spacing */
@@ -199,7 +207,6 @@
 	}
 
 	/* <-- Table styles --> */
-
 	/* Table container */
 	:global(.sanity-table) {
 		width: 100%;

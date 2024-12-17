@@ -61,6 +61,26 @@ export async function load({ params, fetch }) {
 		// Define serializers
 		const serializers = {
 			types: {
+				block: (props) => {
+					// Check if the block is a "normal" paragraph
+					if (props.node.style === 'normal') {
+						return h('p', { className: 'paragraph-inline' }, props.children);
+					}
+
+					// Render other block styles (e.g., headers) appropriately
+					switch (props.node.style) {
+						case 'h1':
+							return h('h1', {}, props.children);
+						case 'h2':
+							return h('h2', {}, props.children);
+						case 'h3':
+							return h('h3', {}, props.children);
+						// Add more cases as needed
+						default:
+							// Default to a <p> without the class for unknown styles
+							return h('p', {}, props.children);
+					}
+				},
 				// Custom serializer for code block
 				code: (props) =>
 					h('pre', { className: props.node.language }, h('code', {}, props.node.code)),
