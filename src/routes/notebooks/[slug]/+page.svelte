@@ -4,7 +4,6 @@
 	import katex from 'katex';
 	import 'katex/dist/katex.min.css';
 	import hljs from 'highlight.js';
-	import ReferencesNav from '../../../components/ReferencesNav.svelte';
 
 	export let data;
 	const notebook = data.notebook;
@@ -88,7 +87,7 @@
 	<main class="flex min-h-screen w-screen">
 		<TableOfContents />
 
-		<article id="content" class="ml-[20%] mr-[22%] flex h-full w-full flex-col p-8">
+		<article id="content" class="ml-[20%] mr-[20%] flex h-full w-full flex-col p-8">
 			<p class="pb-1 text-4xl">{notebook.title}</p>
 			<div class="mb-4">
 				<div class="flex flex-wrap gap-1">
@@ -119,8 +118,6 @@
 				{@html processedBody}
 			</div>
 		</article>
-
-		<ReferencesNav />
 	</main>
 {/if}
 
