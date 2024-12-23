@@ -122,7 +122,36 @@
 {/if}
 
 <style>
-	/* <-- Dynamic html block styles --> */
+	/* Gallery styles */
+	:global(.img-inline) {
+		display: flex;
+		gap: 1rem;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+
+	:global(.img-grid) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	/* Note block styles */
+	:global(.note-block) {
+		background-color: #d9ebff; /* Light blue background for emphasis */
+		border-left: 5px solid steelblue; /* Left border for extra visual focus */
+		padding: 10px 15px; /* Padding for better readability */
+		margin: 15px 0; /* Space above and below the note block */
+		border-radius: 4px; /* Slightly rounded corners for a modern look */
+		color: #003366; /* Dark blue text color for good contrast */
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+	}
+
+	:global(.note-highlight) {
+		display: block;
+	}
+
+	/* <-- Paragraph and header block styles --> */
 	:global(#content .paragraph-inline) {
 		display: inline;
 	}
@@ -204,7 +233,6 @@
 	}
 
 	/* <-- Table styles --> */
-	/* Table container */
 	:global(.sanity-table) {
 		width: 100%;
 		border-collapse: collapse;
@@ -214,7 +242,6 @@
 		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	}
 
-	/* Table headers */
 	:global(.sanity-table th) {
 		background-color: #4caf50;
 		color: white;
@@ -224,28 +251,23 @@
 		border-bottom: 2px solid #ddd;
 	}
 
-	/* Table rows */
 	:global(.sanity-table tr) {
 		border-bottom: 1px solid #ddd;
 	}
 
-	/* Table cells */
 	:global(.sanity-table td) {
 		padding: 12px 15px;
 		text-align: left;
 	}
 
-	/* Alternating row colors */
 	:global(.sanity-table tr:nth-child(even)) {
 		background-color: #f9f9f9;
 	}
 
-	/* Hover effect */
 	:global(.sanity-table tr:hover) {
 		background-color: #f1f1f1;
 	}
 
-	/* Border for table cells */
 	:global(.sanity-table td, .sanity-table th) {
 		border: 1px solid #ddd;
 	}

@@ -64,6 +64,14 @@ export async function load({ params, fetch }) {
 				block: (props) => {
 					// Check if the block is a "normal" paragraph
 					if (props.node.style === 'normal') {
+						const textContent = props.children?.[0] || '';
+
+						// Additional styling for note blocks
+						if (typeof textContent == 'object' && textContent.innerHTML == 'Note:') {
+							textContent.className = 'note-highlight';
+							return h('p', { className: 'note-block' }, props.children);
+						}
+
 						return h('p', { className: 'paragraph-inline' }, props.children);
 					}
 
@@ -77,7 +85,7 @@ export async function load({ params, fetch }) {
 							return h('h3', {}, props.children);
 						// Add more cases as needed
 						default:
-							// Default to a <p> without the class for unknown styles
+							// Default to a <p> without class for unknown styles
 							return h('p', {}, props.children);
 					}
 				},
@@ -96,6 +104,22 @@ export async function load({ params, fetch }) {
 						alt: altText,
 						className: 'sanity-image'
 					});
+				},
+				gallery: (props) => {
+					const display = props.node.display;
+					const images = props.node.images;
+
+					// Create img elements
+					const imgElements = images.map((img, idx) =>
+						h('img', {
+							src: builder.image(img.asset).url(),
+							alt: img.alt || 'Image',
+							key: idx
+						})
+					);
+
+					// Wrap img elements in a div with the class matching the display
+					return h('div', { className: `img-${display}` }, imgElements);
 				},
 				// Custom serializer for table
 				table: (props) => {
