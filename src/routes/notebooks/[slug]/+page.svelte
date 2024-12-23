@@ -1,13 +1,18 @@
 <script lang="ts">
-	import TableOfContents from '../../../components/TableOfContents.svelte';
+	import TableOfContents from '../../../components/TableOfThings.svelte';
 	import { onMount } from 'svelte';
 	import katex from 'katex';
 	import 'katex/dist/katex.min.css';
 	import hljs from 'highlight.js';
+	import { toc, tof } from '$lib/store';
+	import TableOfThings from '../../../components/TableOfThings.svelte';
 
 	export let data;
 	const notebook = data.notebook;
+	const tocItems = [];
+	const tofItems = [];
 
+	// Pre-Processing
 	onMount(() => {
 		// Render KaTeX for inline LaTeX elements
 		const latexInlineElements = document.querySelectorAll('.latex-inline');
@@ -23,7 +28,6 @@
 		// Process and number dynamic headings
 		const headers = Array.from(document.querySelectorAll('.dynamic-heading'));
 		const levelIndices = {};
-
 		headers.forEach((header) => {
 			const level = parseInt(header.tagName.replace('H', ''), 10);
 
@@ -46,7 +50,37 @@
 			// Prepend the hierarchical number to the heading's text
 			header.textContent = `${prefix} ${header.textContent}`;
 			header.id = header.textContent.replace(/ /g, '');
+
+			tocItems.push({
+				id: header.id,
+				text: header.textContent,
+				level
+			});
 		});
+
+		toc.set(tocItems);
+
+		// Process and number dynamic figures
+		const figures = Array.from(document.querySelectorAll('.sanity-image'));
+		figures.forEach((figure, idx) => {
+			// Add a caption
+			const span = document.createElement('span');
+			span.className = `figure-caption`;
+			span.textContent = `Figure ${idx + 1}: ${figure.alt}`;
+			figure.insertAdjacentElement('afterend', span);
+
+			// Add an ID to the figure for potential referencing
+			figure.id = `figure-${idx + 1}`;
+			figure.textContent = `Figure ${idx + 1}`;
+
+			tofItems.push({
+				id: figure.id,
+				text: `${figure.textContent}: ${figure.alt}`,
+				level: 1
+			});
+		});
+
+		tof.set(tofItems);
 
 		const codeBlocks = document.querySelectorAll('pre code');
 		codeBlocks.forEach((block) => {
@@ -85,7 +119,7 @@
 
 {#if notebook}
 	<main class="flex min-h-screen w-screen">
-		<TableOfContents />
+		<TableOfThings />
 
 		<article id="content" class="ml-[20%] mr-[20%] flex h-full w-full flex-col p-8">
 			<p class="pb-1 text-4xl">{notebook.title}</p>
@@ -136,15 +170,25 @@
 		gap: 1rem;
 	}
 
+	/* Figure/Image styles */
+	:global(.figure-caption) {
+		font-size: 0.9rem; /* Slightly smaller than body text */
+		color: #4682b4; /* Muted color for better contrast */
+		text-align: center; /* Center the caption text */
+		margin-top: 0.5rem; /* Add spacing between the figure and caption */
+		font-style: italic; /* Italicized to indicate it's a caption */
+		line-height: 1.4; /* Improve readability */
+	}
+
 	/* Note block styles */
 	:global(.note-block) {
 		background-color: #d9ebff; /* Light blue background for emphasis */
 		border-left: 5px solid steelblue; /* Left border for extra visual focus */
 		padding: 10px 15px; /* Padding for better readability */
-		margin: 15px 0; /* Space above and below the note block */
+		margin: 20px 0; /* Space above and below the note block */
 		border-radius: 4px; /* Slightly rounded corners for a modern look */
 		color: #003366; /* Dark blue text color for good contrast */
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	}
 
 	:global(.note-highlight) {
