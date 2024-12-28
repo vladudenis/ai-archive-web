@@ -8,3 +8,4 @@ export interface Item {
 
 export const toc = writable<Item[]>([]);
 export const tof = writable<Item[]>([]);
+export const tofx = writable<Item[]>([]);

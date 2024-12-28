@@ -1,16 +1,16 @@
 <script lang="ts">
-	import TableOfContents from '../../../components/TableOfThings.svelte';
 	import { onMount } from 'svelte';
 	import katex from 'katex';
 	import 'katex/dist/katex.min.css';
 	import hljs from 'highlight.js';
-	import { toc, tof } from '$lib/store';
+	import { toc, tof, tofx } from '$lib/store';
 	import TableOfThings from '../../../components/TableOfThings.svelte';
 
 	export let data;
 	const notebook = data.notebook;
 	const tocItems = [];
 	const tofItems = [];
+	const tofxItems = [];
 
 	// Pre-Processing
 	onMount(() => {
@@ -82,12 +82,108 @@
 
 		tof.set(tofItems);
 
+		// Process LaTeX
 		const codeBlocks = document.querySelectorAll('pre code');
 		codeBlocks.forEach((block) => {
 			hljs.highlightElement(block); // Highlight.js applies syntax highlighting
 		});
+
+		// Definition and Theorem Blocks
+		const defBlocks = document.querySelectorAll('.def-block');
+		const thmBlocks = document.querySelectorAll('.thm-block');
+
+		// Process definition and theorem blocks
+		processDefThmBlocks(defBlocks);
+		processDefThmBlocks(thmBlocks);
+
+		// Process and number facts
+		const definitions = Array.from(document.querySelectorAll('.def-block'));
+		definitions.forEach((def, idx) => {
+			def.id = `thm-${idx + 1}`;
+
+			const text = def.querySelectorAll('.fact-highlight')[0].textContent;
+
+			tofxItems.push({
+				id: def.id,
+				text: `${text.substring(0, text.length - 1)} ${idx + 1}`,
+				level: 1
+			});
+		});
+		const theorems = Array.from(document.querySelectorAll('.thm-block'));
+		theorems.forEach((thm, idx) => {
+			thm.id = `thm-${idx + 1}`;
+
+			const text = thm.querySelectorAll('.fact-highlight')[0].textContent;
+
+			tofxItems.push({
+				id: thm.id,
+				text: `${text.substring(0, text.length - 1)} ${idx + 1}`,
+				level: 1
+			});
+		});
+
+		tofx.set(tofxItems);
 	});
 
+	// Def-Thm block function
+	function processDefThmBlocks(blocks) {
+		blocks.forEach((block) => {
+			let sibling = block.nextElementSibling;
+			let contentToAdd = [];
+
+			// Extract content after the <strong> definition label
+			const strongElement = block.querySelector('strong');
+			if (strongElement) {
+				// Extract the HTML after the <strong> element, which contains "Definition:"
+				let contentAfterStrong = block.innerHTML.slice(strongElement.outerHTML.length);
+
+				// Check if there's any content to append after "Definition:"
+				contentToAdd.push(strongElement);
+				contentToAdd.push(contentAfterStrong);
+			}
+
+			// Iterate through siblings and collect content until we find '>'
+			while (sibling && !sibling.textContent.includes('>')) {
+				contentToAdd.push(sibling);
+				sibling = sibling.nextElementSibling;
+			}
+
+			// Add the final element that contains '>'
+			if (sibling) {
+				sibling.textContent = sibling.textContent.replace(/[<>]/g, '');
+				contentToAdd.push(sibling);
+			}
+
+			// Insert collected content inside the def-block
+			const children = block.children;
+
+			block.innerHTML = ''; // Clear the original block content
+			for (const child of children) {
+				block.appendChild(child);
+			}
+
+			// Append the collected content as the second child
+			contentToAdd.forEach((content) => {
+				if (typeof content == 'string') {
+					const cleanedContent = content.replace(/&lt;|&gt;|[<>]/g, '');
+					block.append(createBlockElement('paragraph-inline', cleanedContent));
+				} else {
+					block.appendChild(content);
+				}
+			});
+		});
+	}
+
+	// Helper function
+	function createBlockElement(className, text) {
+		// Helper function to create an element with a given className and text
+		const element = document.createElement('p');
+		element.className = className;
+		element.innerHTML = text;
+		return element;
+	}
+
+	// Processing
 	function processRenderedBody(content: string): string {
 		// Add a wrapper class to dynamic headings
 		content = content.replace(/<(h[1-3])>/g, '<$1 class="dynamic-heading">');
@@ -192,6 +288,40 @@
 	}
 
 	:global(.note-highlight) {
+		display: block;
+	}
+
+	/* Definition block styles */
+	:global(.def-block) {
+		border-left: 4px solid #0073e6; /* Blue accent for the left border */
+		padding: 1rem;
+		margin: 1.5rem 0;
+		background-color: #f9f9f9; /* Light gray background for emphasis */
+		font-family: 'Georgia', serif; /* Classic serif font for a formal look */
+		font-size: 1.1rem;
+		line-height: 1.6;
+		color: #333; /* Dark text for readability */
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+	}
+
+	/* Theorem block styles */
+	:global(.thm-block) {
+		border-left: 4px solid #0073e6; /* Blue accent for the left border */
+		padding: 1rem;
+		margin: 1.5rem 0;
+		background-color: #f9f9f9; /* Light gray background for emphasis */
+		font-family: 'Georgia', serif; /* Classic serif font for a formal look */
+		font-size: 1.1rem;
+		line-height: 1.6;
+		color: #333; /* Dark text for readability */
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+	}
+
+	:global(.fact-highlight) {
+		font-weight: bold;
+		font-size: 1.2rem;
+		margin-bottom: 0.5rem;
+		color: #0056b3; /* Slightly darker blue for the title */
 		display: block;
 	}
 

@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { toc, tof } from '$lib/store';
+	import { toc, tof, tofx } from '$lib/store';
+	import { Book, Image, Sigma } from 'lucide-svelte';
 
 	$: tocItems = $toc;
 	$: tofItems = $tof;
+	$: tofxItems = $tofx;
 
 	let activeView = 'toc';
-	$: activeItems = activeView === 'toc' ? tocItems : tofItems;
+	$: activeItems = activeView === 'toc' ? tocItems : activeView === 'tof' ? tofItems : tofxItems;
 </script>
 
 <nav
@@ -19,7 +21,7 @@
 			class:bg-gray-300={activeView === 'toc'}
 			class:bg-gray-200={activeView !== 'toc'}
 		>
-			Table of Contents
+			<Book />
 		</button>
 		<button
 			class="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none"
@@ -27,13 +29,25 @@
 			class:bg-gray-300={activeView === 'tof'}
 			class:bg-gray-200={activeView !== 'tof'}
 		>
-			Table of Figures
+			<Image />
+		</button>
+		<button
+			class="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none"
+			on:click={() => (activeView = 'tofx')}
+			class:bg-gray-300={activeView === 'tofx'}
+			class:bg-gray-200={activeView !== 'tofx'}
+		>
+			<Sigma />
 		</button>
 	</div>
 
 	<!-- Dynamic Heading -->
 	<h2 class="mb-2 text-lg font-semibold">
-		{activeView === 'toc' ? 'Table of Contents' : 'Table of Figures'}
+		{activeView === 'toc'
+			? 'Table of Contents'
+			: activeView === 'tof'
+				? 'Table of Figures'
+				: 'Table of Facts'}
 	</h2>
 
 	<!-- Dynamic List -->

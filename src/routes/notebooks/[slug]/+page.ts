@@ -64,12 +64,25 @@ export async function load({ params, fetch }) {
 				block: (props) => {
 					// Check if the block is a "normal" paragraph
 					if (props.node.style === 'normal') {
-						const textContent = props.children?.[0] || '';
+						const firstChild = props.children?.[0] || '';
 
-						// Additional styling for note blocks
-						if (typeof textContent == 'object' && textContent.innerHTML == 'Note:') {
-							textContent.className = 'note-highlight';
-							return h('p', { className: 'note-block' }, props.children);
+						// Special case for bold keywords
+						if (typeof firstChild == 'object') {
+							// Additional styling for note blocks
+							if (firstChild.innerHTML == 'Note:') {
+								firstChild.className = 'note-highlight';
+								return h('p', { className: 'note-block' }, props.children);
+							}
+							// Additional styling for definition blocks
+							else if (firstChild.innerHTML == 'Definition:') {
+								firstChild.className = 'fact-highlight';
+								return h('p', { className: 'def-block' }, props.children);
+							}
+							// Additional styling for theorem blocks
+							else if (firstChild.innerHTML == 'Theorem:') {
+								firstChild.className = 'fact-highlight';
+								return h('p', { className: 'thm-block' }, props.children);
+							}
 						}
 
 						return h('p', { className: 'paragraph-inline' }, props.children);
