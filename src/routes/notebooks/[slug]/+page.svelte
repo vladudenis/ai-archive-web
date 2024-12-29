@@ -134,12 +134,15 @@
 			// Extract content after the <strong> definition label
 			const strongElement = block.querySelector('strong');
 			if (strongElement) {
-				// Extract the HTML after the <strong> element, which contains "Definition:"
+				// Extract the HTML after the <strong> element
 				let contentAfterStrong = block.innerHTML.slice(strongElement.outerHTML.length);
+				const contentElement = createBlockElement(
+					'paragraph-inline',
+					contentAfterStrong.replace(/&lt;|&gt;/g, '')
+				);
 
-				// Check if there's any content to append after "Definition:"
 				contentToAdd.push(strongElement);
-				contentToAdd.push(contentAfterStrong);
+				contentToAdd.push(contentElement);
 			}
 
 			// Iterate through siblings and collect content until we find '>'
@@ -165,6 +168,7 @@
 			// Append the collected content as the second child
 			contentToAdd.forEach((content) => {
 				if (typeof content == 'string') {
+					// Just in case
 					const cleanedContent = content.replace(/&lt;|&gt;|[<>]/g, '');
 					block.append(createBlockElement('paragraph-inline', cleanedContent));
 				} else {
