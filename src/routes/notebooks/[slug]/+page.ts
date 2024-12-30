@@ -27,7 +27,7 @@ export async function load({ params, fetch }) {
 		const query = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{
 					title,
 					"mainImageUrl": nook.asset->url, // Adjust to match the correct image field reference
-					"authorName": author->name,
+					"authorNames": authors[]->name,
 					"slug": slug.current,
 					body[]{
 						...,

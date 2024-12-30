@@ -221,7 +221,7 @@
 	<main class="flex min-h-screen w-screen">
 		<TableOfThings />
 
-		<article id="content" class="ml-[20%] mr-[20%] flex h-full w-full flex-col p-8">
+		<article id="content" class="mx-[20%] flex h-full w-full flex-col p-8">
 			<p class="pb-1 text-4xl">{notebook.title}</p>
 			<div class="mb-4">
 				<div class="flex flex-wrap gap-1">
@@ -245,6 +245,9 @@
 						month: 'long',
 						day: 'numeric'
 					})}
+				</p>
+				<p>
+					Contributors: {notebook.authorNames.length ? notebook.authorNames.join(', ') : 'None'}
 				</p>
 			</div>
 

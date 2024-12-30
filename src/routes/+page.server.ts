@@ -1,13 +1,19 @@
 import { error } from '@sveltejs/kit';
 
 export const load = async ({ fetch }) => {
-	const query = encodeURIComponent(`*[_type == "post"]{
-		title,
-		"slug": slug.current,
-		body,
-		mainImage{asset->{url}},
-		"categories": categories[]->title,
-		"author": author->name
+	const query = encodeURIComponent(`*[_type == "category"]{
+  title,
+  description,
+  "mainImageUrl": mainImage.asset->url,
+  "nooks": *[_type == "nook" && references(^._id)]{
+    title,
+    description,
+    "posts": *[_type == "post" && references(^._id)]{
+      title,
+      "authorNames": authors[]->name,
+			"slug": slug.current,
+    }
+   }
 	}`);
 	const url = `https://x4ducbn5.api.sanity.io/v2023-01-01/data/query/production?query=${query}`;
 
@@ -16,12 +22,12 @@ export const load = async ({ fetch }) => {
 		if (!res.ok) {
 			const errorText = await res.text();
 			console.log(errorText);
-			throw new Error('Failed to fetch posts');
+			throw new Error('Failed to fetch categories');
 		}
-		const { result: posts } = await res.json();
-		return { posts };
+		const { result: categories } = await res.json();
+		return { categories };
 	} catch (err) {
-		console.error('Error fetching posts:', err);
-		throw error(500, 'Failed to load posts');
+		console.error('Error fetching categories:', err);
+		throw error(500, 'Failed to load categories');
 	}
 };
