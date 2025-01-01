@@ -337,6 +337,10 @@
 		display: inline;
 	}
 
+	:global(#content .paragraph-inline a) {
+		color: steelblue;
+	}
+
 	:global(#content p:empty) {
 		display: block; /* Ensure it acts as a block element */
 		margin: 0.75em 0; /* Add vertical spacing */
