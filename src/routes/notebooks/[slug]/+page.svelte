@@ -221,7 +221,7 @@
 	<main class="flex min-h-screen w-screen">
 		<TableOfThings />
 
-		<article id="content" class="mx-[20%] flex h-full w-full flex-col p-8">
+		<article id="content" class="ml-[20%] flex h-full w-full flex-col p-8 xl:mx-[20%]">
 			<p class="pb-1 text-4xl">{notebook.title}</p>
 			<div class="mb-4">
 				<div class="flex flex-wrap gap-1">

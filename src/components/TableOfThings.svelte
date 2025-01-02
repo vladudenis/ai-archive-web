@@ -16,7 +16,7 @@
 	<!-- Toggle Buttons -->
 	<div class="mb-4 flex justify-between">
 		<button
-			class="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none"
+			class="rounded-md bg-gray-200 p-1 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none lg:px-4 lg:py-2"
 			on:click={() => (activeView = 'toc')}
 			class:bg-gray-300={activeView === 'toc'}
 			class:bg-gray-200={activeView !== 'toc'}
@@ -24,7 +24,7 @@
 			<Book />
 		</button>
 		<button
-			class="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none"
+			class="rounded-md bg-gray-200 p-1 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none lg:px-4 lg:py-2"
 			on:click={() => (activeView = 'tof')}
 			class:bg-gray-300={activeView === 'tof'}
 			class:bg-gray-200={activeView !== 'tof'}
@@ -32,7 +32,7 @@
 			<Image />
 		</button>
 		<button
-			class="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none"
+			class="rounded-md bg-gray-200 p-1 text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none lg:px-4 lg:py-2"
 			on:click={() => (activeView = 'tofx')}
 			class:bg-gray-300={activeView === 'tofx'}
 			class:bg-gray-200={activeView !== 'tofx'}
@@ -54,7 +54,10 @@
 	<ul class="ml-1 list-none space-y-1">
 		{#each activeItems as { id, text, level }}
 			<li style="margin-left: {level - 1}rem;">
-				<a href={`#${id}`} class="text-[#4682b4] hover:underline focus:outline-none">
+				<a
+					href={`#${id}`}
+					class="text-sm text-[#4682b4] hover:underline focus:outline-none lg:text-base"
+				>
 					{text}
 				</a>
 			</li>

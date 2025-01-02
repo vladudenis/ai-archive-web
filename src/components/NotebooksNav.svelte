@@ -16,8 +16,8 @@
 			{#each $availableNotebooks as { authorNames, title, slug }}
 				<li>
 					<a href={`/notebooks/${slug}`}>
-						<p class="text-lg font-medium text-gray-800">{title}</p>
-						<p class="text-sm text-gray-600">
+						<p class="text-sm font-medium text-gray-800 lg:text-lg">{title}</p>
+						<p class="text-xs text-gray-600 lg:text-sm">
 							by {authorNames.length ? authorNames.join(', ') : 'None'}
 						</p>
 					</a>
