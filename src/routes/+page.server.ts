@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 
 export const load = async ({ fetch }) => {
 	const query = encodeURIComponent(`*[_type == "category"]{
+  rank,
   title,
   description,
   "mainImageUrl": mainImage.asset->url,
@@ -9,6 +10,7 @@ export const load = async ({ fetch }) => {
     title,
     description,
     "posts": *[_type == "post" && references(^._id)]{
+    	rank,
       title,
       "authorNames": authors[]->name,
 			"slug": slug.current,

@@ -22,7 +22,13 @@
 
 			// Update the available notebooks based on selected nooks
 			const updatedNotebooks = Object.values(updatedNooks).flatMap((n) => n.posts || []);
-			availableNotebooks.set(Array.from(new Set(updatedNotebooks)));
+			availableNotebooks.set(
+				Array.from(new Set(updatedNotebooks)).sort((a, b) => {
+					const rankA = a.rank ?? 99;
+					const rankB = b.rank ?? 99;
+					return rankA - rankB;
+				})
+			);
 
 			return updatedNooks;
 		});
@@ -35,7 +41,7 @@
 	<div id="exploration" class="ml-[25%] mr-[15%] flex h-full w-full flex-col p-8">
 		<p class="page-title">Explore Learning Nooks</p>
 		{#if categories && categories.length > 0}
-			{#each categories as section}
+			{#each categories.slice().sort((a, b) => a.rank - b.rank) as section}
 				<section>
 					<p class="section-title">{section.title}</p>
 					<p class="section-description">{section.description}</p>
