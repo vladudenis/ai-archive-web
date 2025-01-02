@@ -99,7 +99,7 @@
 		// Process and number facts
 		const definitions = Array.from(document.querySelectorAll('.def-block'));
 		definitions.forEach((def, idx) => {
-			def.id = `thm-${idx + 1}`;
+			def.id = `def-${idx + 1}`;
 
 			const text = def.querySelectorAll('.fact-highlight')[0].textContent;
 
