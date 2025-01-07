@@ -3,6 +3,7 @@
 	import { availableNotebooks } from '$lib/store';
 	import NotebooksNav from '../components/NotebooksNav.svelte';
 	import { writable } from 'svelte/store';
+	import type { Notebook } from '$lib/interfaces';
 
 	const { categories } = $page.data;
 	const selectedNooks = writable({});
@@ -22,8 +23,16 @@
 
 			// Update the available notebooks based on selected nooks
 			const updatedNotebooks = Object.values(updatedNooks).flatMap((n) => n.posts || []);
+			const uniqueNotebooks: Notebook[] = Array.from(
+				updatedNotebooks
+					.reduce((map, notebook) => {
+						map.set(notebook.title, notebook); // Using title as the key for uniqueness
+						return map;
+					}, new Map())
+					.values()
+			);
 			availableNotebooks.set(
-				Array.from(new Set(updatedNotebooks)).sort((a, b) => {
+				uniqueNotebooks.sort((a, b) => {
 					const rankA = a.rank ?? 99;
 					const rankB = b.rank ?? 99;
 					return rankA - rankB;
@@ -38,7 +47,7 @@
 <main class="flex min-h-screen w-screen">
 	<NotebooksNav />
 
-	<div id="exploration" class="ml-[25%] mr-[15%] flex h-full w-full flex-col p-8">
+	<div id="exploration" class="ml-[25%] mr-[15%] flex h-full flex-col p-8">
 		<p class="page-title">Explore Learning Nooks</p>
 		{#if categories && categories.length > 0}
 			{#each categories.slice().sort((a, b) => a.rank - b.rank) as section}
