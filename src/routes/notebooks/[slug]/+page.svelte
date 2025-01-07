@@ -218,7 +218,7 @@
 </script>
 
 {#if notebook}
-	<main class="flex min-h-screen w-screen">
+	<main class="flex min-h-screen">
 		<TableOfThings />
 
 		<article id="content" class="ml-[20%] flex h-full w-full flex-col p-8 xl:mx-[20%]">
