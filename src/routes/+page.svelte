@@ -44,11 +44,19 @@
 	}
 </script>
 
-<main class="flex min-h-screen w-screen">
+<main class="flex min-h-screen">
 	<NotebooksNav />
 
 	<div id="exploration" class="ml-[25%] mr-[15%] flex h-full flex-col p-8">
-		<p class="page-title">Explore Learning Nooks</p>
+		<div class="flex items-center justify-between">
+			<p class="page-title">Explore Learning Nooks</p>
+			<a
+				href="./notebooks/rules"
+				class="rounded-md bg-gray-200 p-1 text-sm font-medium text-gray-700 transition duration-300 hover:bg-gray-300 focus:outline-none lg:px-4 lg:py-2"
+			>
+				Contribution Guidelines
+			</a>
+		</div>
 		{#if categories && categories.length > 0}
 			{#each categories.slice().sort((a, b) => a.rank - b.rank) as section}
 				<section>
