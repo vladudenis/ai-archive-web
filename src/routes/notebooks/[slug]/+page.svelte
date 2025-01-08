@@ -80,6 +80,41 @@
 			});
 		});
 
+		// Process gallery images
+		const imageGrids = Array.from(document.querySelectorAll('.img-grid, .img-inline'));
+		imageGrids.forEach((grid, gridIdx) => {
+			const images = Array.from(grid.querySelectorAll('img'));
+
+			// Process the images in the grid in original order for tofItems, reversed for DOM
+			const captions = [];
+			images.forEach((img, imgIdx) => {
+				const figureNumber = `${gridIdx + 1}.${imgIdx + 1}`;
+
+				// Add a caption for each image inside the grid
+				const span = document.createElement('span');
+				span.className = `figure-caption-multiline`;
+				span.textContent = `Figure ${figureNumber}: ${img.alt}`;
+
+				captions.push(span);
+
+				// Add an ID to the image for potential referencing
+				img.id = `figure-${figureNumber}`;
+				img.textContent = `Figure ${figureNumber}`;
+
+				// Push to tofItems in the correct order
+				tofItems.push({
+					id: img.id,
+					text: `${img.textContent}: ${img.alt}`,
+					level: 1
+				});
+			});
+
+			captions.reverse().forEach((caption) => {
+				// Insert the caption after the entire grid div, outside of it
+				grid.insertAdjacentElement('afterend', caption);
+			});
+		});
+
 		tof.set(tofItems);
 
 		// Process LaTeX
@@ -279,8 +314,14 @@
 		color: #4682b4; /* Muted color for better contrast */
 		text-align: center; /* Center the caption text */
 		margin-top: 0.5rem; /* Add spacing between the figure and caption */
-		font-style: italic; /* Italicized to indicate it's a caption */
 		line-height: 1.4; /* Improve readability */
+	}
+
+	:global(.figure-caption-multiline) {
+		font-size: 0.9rem; /* Slightly smaller than body text */
+		color: #4682b4; /* Muted color for better contrast */
+		line-height: 1.4; /* Improve readability */
+		display: block;
 	}
 
 	/* Note block styles */
