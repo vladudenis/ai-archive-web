@@ -52,7 +52,7 @@
 			<p class="page-title">Explore Learning Nooks</p>
 			<a
 				href="./notebooks/rules"
-				class="rounded-md bg-gray-200 p-1 text-sm font-medium text-gray-700 transition duration-300 hover:bg-gray-300 focus:outline-none lg:px-4 lg:py-2"
+				class="rounded-md bg-gray-200 p-1 text-center text-sm font-medium text-gray-700 transition duration-300 hover:bg-gray-300 focus:outline-none lg:px-4 lg:py-2"
 			>
 				Contribution Guidelines
 			</a>

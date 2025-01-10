@@ -11,7 +11,7 @@
 </script>
 
 <nav
-	class="fixed left-3 top-8 z-10 min-h-72 w-1/5 overflow-y-auto rounded-lg border border-gray-300 bg-gray-50 p-4 pl-6"
+	class="fixed left-3 top-8 z-10 max-h-[95%] min-h-72 w-1/5 overflow-y-auto rounded-lg border border-gray-300 bg-gray-50 p-4 pl-6"
 >
 	<!-- Toggle Buttons -->
 	<div class="mb-4 flex justify-between">
