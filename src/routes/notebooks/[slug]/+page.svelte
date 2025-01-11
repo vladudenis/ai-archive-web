@@ -137,10 +137,14 @@
 			def.id = `def-${idx + 1}`;
 
 			const text = def.querySelectorAll('.fact-highlight')[0].textContent;
+			const displayText =
+				text.length > 'Definition:'.length
+					? text
+					: `${text.substring(0, text.length - 1)} ${idx + 1}`;
 
 			tofxItems.push({
 				id: def.id,
-				text: `${text.substring(0, text.length - 1)} ${idx + 1}`,
+				text: displayText,
 				level: 1
 			});
 		});
@@ -149,10 +153,12 @@
 			thm.id = `thm-${idx + 1}`;
 
 			const text = thm.querySelectorAll('.fact-highlight')[0].textContent;
+			const displayText =
+				text.length > 'Theorem:'.length ? text : `${text.substring(0, text.length - 1)} ${idx + 1}`;
 
 			tofxItems.push({
 				id: thm.id,
-				text: `${text.substring(0, text.length - 1)} ${idx + 1}`,
+				text: displayText,
 				level: 1
 			});
 		});
@@ -176,8 +182,13 @@
 					contentAfterStrong.replace(/&lt;|&gt;/g, '')
 				);
 
-				contentToAdd.push(strongElement);
-				contentToAdd.push(contentElement);
+				if (contentElement.innerText.includes('"')) {
+					strongElement.innerText += ` ${contentElement.innerText.replace(/"/g, '')}`;
+					contentToAdd.push(strongElement);
+				} else {
+					contentToAdd.push(strongElement);
+					contentToAdd.push(contentAfterStrong);
+				}
 			}
 
 			// Iterate through siblings and collect content until we find '>'
