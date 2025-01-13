@@ -7,6 +7,7 @@ export const load = async ({ fetch }) => {
   description,
   "mainImageUrl": mainImage.asset->url,
   "nooks": *[_type == "nook" && references(^._id)]{
+  	rank,
     title,
     description,
     "posts": *[_type == "post" && references(^._id)]{

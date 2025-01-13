@@ -63,7 +63,7 @@
 					<p class="section-title">{section.title}</p>
 					<p class="section-description">{section.description}</p>
 					<ul class="nook-grid">
-						{#each section.nooks as nook}
+						{#each section.nooks.slice().sort((a, b) => a.rank - b.rank) as nook}
 							<li class="nook-card">
 								<button
 									class="nook-button"
