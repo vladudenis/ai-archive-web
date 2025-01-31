@@ -123,13 +123,15 @@
 			hljs.highlightElement(block); // Highlight.js applies syntax highlighting
 		});
 
-		// Definition and Theorem Blocks
+		// Definition, Lemma and Theorem Blocks
 		const defBlocks = document.querySelectorAll('.def-block');
 		const thmBlocks = document.querySelectorAll('.thm-block');
+		const lemmaBlocks = document.querySelectorAll('.lemma-block');
 
 		// Process definition and theorem blocks
 		processDefThmBlocks(defBlocks);
 		processDefThmBlocks(thmBlocks);
+		processDefThmBlocks(lemmaBlocks);
 
 		// Process and number facts
 		const definitions = Array.from(document.querySelectorAll('.def-block'));
@@ -148,6 +150,7 @@
 				level: 1
 			});
 		});
+
 		const theorems = Array.from(document.querySelectorAll('.thm-block'));
 		theorems.forEach((thm, idx) => {
 			thm.id = `thm-${idx + 1}`;
@@ -164,9 +167,26 @@
 		});
 
 		tofx.set(tofxItems);
+
+		const lemmas = Array.from(document.querySelectorAll('.lemma-block'));
+		lemmas.forEach((lemma, idx) => {
+			lemma.id = `lemma-${idx + 1}`;
+
+			const text = lemma.querySelectorAll('.fact-highlight')[0].textContent;
+			const displayText =
+				text.length > 'Lemma:'.length ? text : `${text.substring(0, text.length - 1)} ${idx + 1}`;
+
+			tofxItems.push({
+				id: lemma.id,
+				text: displayText,
+				level: 1
+			});
+		});
+
+		tofx.set(tofxItems);
 	});
 
-	// Def-Thm block function
+	// Def-Thm-Lemma block function
 	function processDefThmBlocks(blocks) {
 		blocks.forEach((block) => {
 			let sibling = block.nextElementSibling;
@@ -351,20 +371,9 @@
 	}
 
 	/* Definition block styles */
-	:global(.def-block) {
-		border-left: 4px solid #0073e6; /* Blue accent for the left border */
-		padding: 1rem;
-		margin: 1.5rem 0;
-		background-color: #f9f9f9; /* Light gray background for emphasis */
-		font-family: 'Georgia', serif; /* Classic serif font for a formal look */
-		font-size: 1.1rem;
-		line-height: 1.6;
-		color: #333; /* Dark text for readability */
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-	}
-
-	/* Theorem block styles */
-	:global(.thm-block) {
+	:global(.def-block),
+	:global(.thm-block),
+	:global(.lemma-block) {
 		border-left: 4px solid #0073e6; /* Blue accent for the left border */
 		padding: 1rem;
 		margin: 1.5rem 0;

@@ -83,6 +83,11 @@ export async function load({ params, fetch }) {
 								firstChild.className = 'fact-highlight';
 								return h('p', { className: 'thm-block' }, props.children);
 							}
+							// Additional styling for theorem blocks
+							else if (firstChild.innerHTML == 'Lemma:') {
+								firstChild.className = 'fact-highlight';
+								return h('p', { className: 'lemma-block' }, props.children);
+							}
 						}
 
 						return h('p', { className: 'paragraph-inline' }, props.children);
